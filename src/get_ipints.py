@@ -48,3 +48,26 @@ for i in ipint2:
 
 print ("Number of items in list: %s" % lipint2)
 print ("IPs from config file: %s" % str(sys.argv[1]))
+
+raw_input("Press Return to continue to static routes...")
+
+sroute = config.find_objects(r"^ip\sroute")
+lsroute = len(sroute)
+print sroute
+for r in sroute:
+    print r
+
+print ("Number of items in list: %s" % lsroute)
+print ("IPs from config file: %s" % str(sys.argv[1]))
+
+
+raw_input("Press Return to continue to routing configuration...")
+
+router = config.find_all_children(r"^router")
+lrouter = len(router)
+print router
+for r in router:
+    print r
+
+print ("Number of items in list: %s" % lrouter)
+print ("IPs from config file: %s" % str(sys.argv[1]))
