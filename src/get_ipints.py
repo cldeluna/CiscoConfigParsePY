@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# get_vlans.py
+# get_ipints.py
 
 __author__ = 'Claudia'
 
@@ -36,4 +36,15 @@ for i in ipint:
     print i
 
 print ("Number of items in list: %s" % lipint)
+print ("IPs from config file: %s" % str(sys.argv[1]))
+
+raw_input("Press Return to continue to Other IP Section...")
+
+ipint2 = config.find_children_w_parents("^interface\s","ip address")
+lipint2 = len(ipint2)
+print ipint2
+for i in ipint2:
+    print i
+
+print ("Number of items in list: %s" % lipint2)
 print ("IPs from config file: %s" % str(sys.argv[1]))
