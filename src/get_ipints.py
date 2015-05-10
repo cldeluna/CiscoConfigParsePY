@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Getting familiar with ciscoconfparse
 # get_ipints.py
 
 __author__ = 'Claudia'
