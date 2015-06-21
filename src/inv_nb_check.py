@@ -40,6 +40,7 @@ def main():
     not_only="No"
 
     nbfiles=os.listdir(nbdir)
+    nbf=[nbfl.lower() for nbfl in nbfiles]
     #print nbfiles
     #for file in nbfiles:
         #print file
@@ -67,8 +68,9 @@ def main():
             siterows=siterows+1
             #print sw
             #print swfile
-            if swfile in nbfiles:
-                print "%s,%s,%s,%s,swfile,NB File Found"%(ws.cell_value(row_index,1),ws.cell_value(row_index,2),ws.cell_value(row_index,3),ws.cell_value(row_index,4))
+            if swfile in nbf:
+ #               print "%s,%s,%s,%s,swfile,NB File Found"%(ws.cell_value(row_index,1),ws.cell_value(row_index,2),ws.cell_value(row_index,3),ws.cell_value(row_index,4))
+                print "**"
             else:
                 print "%s,%s,%s,%s,swfile,NB File NOT Found"%(ws.cell_value(row_index,1),ws.cell_value(row_index,2),ws.cell_value(row_index,3),ws.cell_value(row_index,4))
     print ("-")*80
