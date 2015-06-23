@@ -14,6 +14,27 @@ import os
 import xlrd
 
 
+class DictDiffer(object):
+    """
+    Calculate the difference between two dictionaries as:
+    (1) items added
+    (2) items removed
+    (3) keys same in both but changed values
+    (4) keys same in both and unchanged values
+    """
+    def __init__(self, current_dict, past_dict):
+        self.current_dict, self.past_dict = current_dict, past_dict
+        self.set_current, self.set_past = set(current_dict.keys()), set(past_dict.keys())
+        self.intersect = self.set_current.intersection(self.set_past)
+    def added(self):
+        return self.set_current - self.intersect
+    def removed(self):
+        return self.set_past - self.intersect
+    def changed(self):
+        return set(o for o in self.intersect if self.past_dict[o] != self.current_dict[o])
+    def unchanged(self):
+        return set(o for o in self.intersect if self.past_dict[o] == self.current_dict[o])
+
 
 # Provided main() calls the above functions
 def main():
@@ -140,35 +161,53 @@ def main():
     for newkey in sorted(wsnewdict):
         print "%s: %s" %(newkey, wsnewdict[newkey])
 
-    mismatch_keys = [key for key in wsolddict if not key in wsnewdict or wsolddict[key] != wsnewdict[key]]
-    print "Mistmatched Keys"
-    print mismatch_keys
-    print "&&&&"
-    match = not bool(mismatch_keys)
-    for key in mismatch_keys:
-        print key
-        print "%s ==> %s" % (wsolddict[key],wsnewdict[key])
+    #mismatch_keys = [key for key in wsolddict if not key in wsnewdict or wsolddict[key] != wsnewdict[key]]
+    #print "Mistmatched Keys"
+    #print mismatch_keys
+    #print "&&&&"
+    #match = not bool(mismatch_keys)
+    #for key in mismatch_keys:
+        #print key
+        #print "%s ==> %s" % (wsolddict[key],wsnewdict[key])
 
-#    for oldrow_index in range(maxrows):
-#        if wsmore.cell_value(row_index,6) == int(siteid):
-#            dnmore=(wsmore.cell_value(row_index,1))
-#           for row_less in range(maxrows):
-#                if wsless.cell_value(row_less,6) == int(siteid):
-#                    dnless=(wsless.cell_value(row_index,1))
+    diff=DictDiffer(wsolddict,wsnewdict)
 
-#            if dnmore == dnless:
-#                print "Same Device Name"
-            #else:
-                #print "Old %s id different from new %s"%(dnold, dnnew)
-#            if swfile in nbf:
-#                print "%s,%s,%s,%s,swfile,NB File Found"%(ws.cell_value(row_index,1),ws.cell_value(row_index,2),ws.cell_value(row_index,3),ws.cell_value(row_index,4))
-#                print "**"
-#            else:
-#                print "%s,%s,%s,%s,swfile,NB File NOT Found"%(ws.cell_value(row_index,1),ws.cell_value(row_index,2),ws.cell_value(row_index,3),ws.cell_value(row_index,4))
-    #print ("-")*80
-    #print str(siterows)
+    diff_added=diff.added()
+    diff_removed=diff.removed()
+    diff_changed=diff.changed()
+    diff_unchanged=diff.unchanged()
 
+    print "+"*80
+    print "Added: %s, %d"%(diff_added,len(diff_added))
+    if len(diff_added) > 0:
+        for i in range(len(diff_added)):
+            elem = diff_added.pop()
+            print "Old Data for %s:, %s"%(elem,wsolddict[elem])
+            print "New Data for %s:, %s"%(elem,wsnewdict[elem])
+            print "\n"
+    print "+"*80
+    print "-"*80
+    print "Removed: %s, %d"%(diff_removed,len(diff_removed))
+    if len(diff_removed) > 0:
+        for i in range(len(diff_removed)):
+            elem = diff_removed.pop()
+            print "Old Data for %s:, %s"%(elem,wsolddict[elem])
+            print "New Data for %s:, %s"%(elem,wsnewdict[elem])
+            print "\n"
+    print "-"*80
+    print "~"*80
+    print "Changed: %s, %d"%(diff_changed, len(diff_changed))
+    if len(diff_changed) > 0:
+        for i in range(len(diff_changed)):
+            elem = diff_changed.pop()
+            print "Old Data for %s:, %s"%(elem,wsolddict[elem])
+            print "New Data for %s:, %s"%(elem,wsnewdict[elem])
+            print "\n"
 
+    print "~"*80
+    print "*"*80
+    print "Unchanged: %s, %d"%(diff_unchanged, len(diff_unchanged))
+    print "*"*80
 
 # Standard call to the main() function.
 if __name__ == '__main__':
