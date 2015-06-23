@@ -217,9 +217,13 @@ def main():
             lennew=len(wsnewdict[elem])
             note="Old inventory record and new inventory record have same number of devices:," + str(lenold/3)
             if lenold > lennew:
-                note="Old inventory record has " + str((lenold-lennew)/3) + " more devices than the new inventory record!"
+                #note="Old inventory record has " + str((lenold-lennew)/3) + " more devices than the new inventory record!"
+                note="Old inventory record has more (%d) items than new inventory record (%d)."%(lenold,lennew)
+            elif lenold < lennew:
+                #note="Old inventory record has " + str((lenold-lennew)/3) + " more devices than the new inventory record!"
+                note="Old inventory record has fewer (%d) items than new inventory record (%d)."%(lenold,lennew)
             else:
-                note="Old inventory record has " + str((lenold-lennew)/3) + " more devices than the new inventory record!"
+                note="Old inventory record and new inventory record have same number of items: %d,"%(lenold)
             print "Old Data for %s:, %s, %s, "%(elem,note,wsolddict[elem])
             print "New Data for %s:, %s, %s, "%(elem,note,wsnewdict[elem])
             #print "\n"
