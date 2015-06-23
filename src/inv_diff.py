@@ -45,12 +45,15 @@ def main():
     :return:
     """
 
+    # Site ID to search on
     siteid=sys.argv[1]
 
+    # Newer Inventory File
     invnew=sys.argv[2]
 
     invsh="Chassis & Module"
 
+    # Older Inventory File
     invold=sys.argv[3]
 
     maxoldrows=0
