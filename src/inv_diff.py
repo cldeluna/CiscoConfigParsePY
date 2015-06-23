@@ -14,6 +14,7 @@ import os
 import xlrd
 
 
+# http://stackoverflow.com/questions/1165352/fast-comparison-between-two-python-dictionary
 class DictDiffer(object):
     """
     Calculate the difference between two dictionaries as:
@@ -89,7 +90,7 @@ def main():
 
     print "Site ID to search:, %s"%(siteid)
     print ("-")*80
-    print "Name, IP Address, Slot, Model, Filename, NB File Found"
+    print "Name:, IP Address, Slot, Model, (muliple sets for a stack)"
 
     if wsold.nrows >= wsnew.nrows:
         maxrows=wsold.nrows
@@ -107,8 +108,8 @@ def main():
         if wsnew.cell_value(row_index,6) == int(siteid):
             maxnewrows=maxnewrows+1
 
-    print maxoldrows
-    print maxnewrows
+    #print maxoldrows
+    #print maxnewrows
 
     #Populate the Old Dictionary from the older file
     for oldrowi in range(wsold.nrows):
@@ -125,10 +126,10 @@ def main():
 
     #print wsolddict
 
-    for key,val in wsolddict.items():
-        print key, "==>",val
+    #for key,val in wsolddict.items():
+        #print key, "==>",val
         #print "\n"
-    print str(len(wsolddict))
+    #print str(len(wsolddict))
 
 
 
@@ -146,20 +147,20 @@ def main():
                 wsnewdict[wsnew.cell_value(newrowi,1)]=wsnewlist
     #print wsolddict
 
-    for key,val in wsnewdict.items():
-        print key, "==>",val
+    #for key,val in wsnewdict.items():
+        #print key, "==>",val
         #print "\n"
-    print str(len(wsnewdict))
-    print str(len(wsolddict))
-    print len(wsnewdict.keys())
-    print len(wsolddict.keys())
-    print wsnewdict.keys() == wsolddict.keys()
+    #print str(len(wsnewdict))
+    #print str(len(wsolddict))
+    #print len(wsnewdict.keys())
+    #print len(wsolddict.keys())
+    #print wsnewdict.keys() == wsolddict.keys()
 
-    for oldkey in sorted(wsolddict):
-        print "%s: %s" %(oldkey, wsolddict[oldkey])
+    #for oldkey in sorted(wsolddict):
+        #print "%s: %s" %(oldkey, wsolddict[oldkey])
 
-    for newkey in sorted(wsnewdict):
-        print "%s: %s" %(newkey, wsnewdict[newkey])
+    #for newkey in sorted(wsnewdict):
+        #print "%s: %s" %(newkey, wsnewdict[newkey])
 
     #mismatch_keys = [key for key in wsolddict if not key in wsnewdict or wsolddict[key] != wsnewdict[key]]
     #print "Mistmatched Keys"
@@ -184,7 +185,7 @@ def main():
             elem = diff_added.pop()
             print "Old Data for %s:, %s"%(elem,wsolddict[elem])
             print "New Data for %s:, %s"%(elem,wsnewdict[elem])
-            print "\n"
+            #print "\n"
     print "+"*80
     print "-"*80
     print "Removed: %s, %d"%(diff_removed,len(diff_removed))
@@ -193,7 +194,7 @@ def main():
             elem = diff_removed.pop()
             print "Old Data for %s:, %s"%(elem,wsolddict[elem])
             print "New Data for %s:, %s"%(elem,wsnewdict[elem])
-            print "\n"
+            #print "\n"
     print "-"*80
     print "~"*80
     print "Changed: %s, %d"%(diff_changed, len(diff_changed))
@@ -202,7 +203,7 @@ def main():
             elem = diff_changed.pop()
             print "Old Data for %s:, %s"%(elem,wsolddict[elem])
             print "New Data for %s:, %s"%(elem,wsnewdict[elem])
-            print "\n"
+            #print "\n"
 
     print "~"*80
     print "*"*80
