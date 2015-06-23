@@ -53,13 +53,8 @@ def main():
 
     invold=sys.argv[3]
 
-    siterows=0
     maxoldrows=0
     maxnewrows=0
-    dnold=""
-    dnnew=""
-    dnmore=""
-    dnless=""
     wsoldlist=[]
     wsolddict={}
     wsnewlist=[]
@@ -91,14 +86,6 @@ def main():
     print ("-")*80
     print "Name:,Notes, IP Address, Slot, Model, (muliple sets for a stack)"
 
-    if wsold.nrows >= wsnew.nrows:
-        maxrows=wsold.nrows
-        wsmore=wsold
-        wsless=wsnew
-    else:
-        maxrows=wsnew.nrows
-        wsmore=wsnew
-        wsless=wsold
 
     for row_index in range(wsold.nrows):
         if wsold.cell_value(row_index,6) == int(siteid):
@@ -110,19 +97,23 @@ def main():
     #print maxoldrows
     #print maxnewrows
 
-    #Populate the Old Dictionary from the older file
+    #Populate the Old Dictionary from the older file - Argument 3
     for oldrowi in range(wsold.nrows):
+        # Only add a row inf the site ID matches what was passed in Argument 2
         if wsold.cell_value(oldrowi,6) == int(siteid):
+            # If the previous device name and the current device name are the same, we want to keep adding to the dictionary
             if wsold.cell_value(oldrowi,1) == wsold.cell_value(oldrowi-1,1):
                 for i in range(2,5):
                     wsoldlist.append(wsold.cell_value(oldrowi, i))
                 wsolddict[wsold.cell_value(oldrowi,1)]=wsoldlist
             else:
+                #If the previous device name and the current device name are different then we zero out the dictionary as we are now gathering data for a different device
                 wsoldlist=[]
                 for i in range(2,5):
                     wsoldlist.append(wsold.cell_value(oldrowi, i))
                 wsolddict[wsold.cell_value(oldrowi,1)]=wsoldlist
 
+    #Printing for troubleshooting
     #for key,val in wsolddict.items():
         #print key, "==>",val
         #print "\n"
@@ -130,8 +121,9 @@ def main():
 
 
 
-    #Populate the New Dictionary from the newer file
+    #Populate the New Dictionary from the newer file - Argument 2
     for newrowi in range(wsnew.nrows):
+        # Only add a row inf the site ID matches what was passed in Argument 2
         if wsnew.cell_value(newrowi,6) == int(siteid):
             if wsnew.cell_value(newrowi,1) == wsnew.cell_value(newrowi-1,1):
                 for i in range(2,5):
@@ -143,7 +135,7 @@ def main():
                     wsnewlist.append(wsnew.cell_value(newrowi, i))
                 wsnewdict[wsnew.cell_value(newrowi,1)]=wsnewlist
 
-
+    #call the DictDiffer fuction to populate differences
     diff=DictDiffer(wsolddict,wsnewdict)
 
     diff_added=diff.added()
@@ -153,13 +145,16 @@ def main():
 
     print "+"*80
     print "Added: %s, %d"%(diff_added,len(diff_added))
+    # If there are added items, the process
     if len(diff_added) > 0:
         for i in range(len(diff_added)):
             elem = diff_added.pop()
+            # Check for key existence so we can generate a meaningful statement
             if elem in wsolddict.keys():
                 print "Old Data for %s:, %s"%(elem,wsolddict[elem])
             else:
                 print "Old Data for %s:, does not exist!"%(elem)
+
             if elem in wsnewdict.keys():
                 print "New Data for %s:, %s"%(elem,wsnewdict[elem])
             else:
@@ -187,6 +182,7 @@ def main():
     if len(diff_changed) > 0:
         for i in range(len(diff_changed)):
             elem = diff_changed.pop()
+            # Trying to asses the level of change based on the length of the values
             lenold=len(wsolddict[elem])
             lennew=len(wsnewdict[elem])
             note="Old inventory record and new inventory record have same number of devices:," + str(lenold/3)
