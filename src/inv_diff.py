@@ -90,7 +90,7 @@ def main():
 
     print "Site ID to search:, %s"%(siteid)
     print ("-")*80
-    print "Name:, IP Address, Slot, Model, (muliple sets for a stack)"
+    print "Name:,Notes, IP Address, Slot, Model, (muliple sets for a stack)"
 
     if wsold.nrows >= wsnew.nrows:
         maxrows=wsold.nrows
@@ -183,8 +183,14 @@ def main():
     if len(diff_added) > 0:
         for i in range(len(diff_added)):
             elem = diff_added.pop()
-            print "Old Data for %s:, %s"%(elem,wsolddict[elem])
-            print "New Data for %s:, %s"%(elem,wsnewdict[elem])
+            if elem in wsolddict.keys():
+                print "Old Data for %s:, %s"%(elem,wsolddict[elem])
+            else:
+                print "Old Data for %s:, does not exist!"%(elem)
+            if elem in wsnewdict.keys():
+                print "New Data for %s:, %s"%(elem,wsnewdict[elem])
+            else:
+                print "New Data for %s:, does not exist!"%(elem)
             #print "\n"
     print "+"*80
     print "-"*80
@@ -192,8 +198,14 @@ def main():
     if len(diff_removed) > 0:
         for i in range(len(diff_removed)):
             elem = diff_removed.pop()
-            print "Old Data for %s:, %s"%(elem,wsolddict[elem])
-            print "New Data for %s:, %s"%(elem,wsnewdict[elem])
+            if elem in wsolddict.keys():
+                print "Old Data for %s:, %s"%(elem,wsolddict[elem])
+            else:
+                print "Old Data for %s:, does not exist!"%(elem)
+            if elem in wsnewdict.keys():
+                print "New Data for %s:, %s"%(elem,wsnewdict[elem])
+            else:
+                print "New Data for %s:, does not exist!"%(elem)
             #print "\n"
     print "-"*80
     print "~"*80
@@ -201,8 +213,15 @@ def main():
     if len(diff_changed) > 0:
         for i in range(len(diff_changed)):
             elem = diff_changed.pop()
-            print "Old Data for %s:, %s"%(elem,wsolddict[elem])
-            print "New Data for %s:, %s"%(elem,wsnewdict[elem])
+            lenold=len(wsolddict[elem])
+            lennew=len(wsnewdict[elem])
+            note="Old inventory record and new inventory record have same number of devices:," + str(lenold/3)
+            if lenold > lennew:
+                note="Old inventory record has " + str((lenold-lennew)/3) + " more devices than the new inventory record!"
+            else:
+                note="Old inventory record has " + str((lenold-lennew)/3) + " more devices than the new inventory record!"
+            print "Old Data for %s:, %s, %s, "%(elem,note,wsolddict[elem])
+            print "New Data for %s:, %s, %s, "%(elem,note,wsnewdict[elem])
             #print "\n"
 
     print "~"*80
