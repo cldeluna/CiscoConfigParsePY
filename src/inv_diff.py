@@ -46,15 +46,12 @@ def main():
     """
 
     siteid=sys.argv[1]
-    #siteid=1389
 
     invnew=sys.argv[2]
-    #inv="/Users/Claudia/Box Sync/Network Transformation/Inventory/DiData-inventory-2015-06-15.xlsx"
 
     invsh="Chassis & Module"
 
     invold=sys.argv[3]
-    #nbdir="/Users/Claudia/Box Sync/Network Transformation/Sites/North America - Year One/1389-Ontario-CA-Solar/show_commands_detail_06.15.15"
 
     siterows=0
     maxoldrows=0
@@ -69,13 +66,15 @@ def main():
     wsnewdict={}
 
 
-
+    # Open the Newer Workbook which should be the second argument
     wbnew = xlrd.open_workbook(invnew)
     wsnew = wbnew.sheet_by_name(invsh)
 
+    # Open the Older Workbook which should be the third argument
     wbold = xlrd.open_workbook(invold)
     wsold = wbold.sheet_by_name(invsh)
 
+    # Print Informational Data on the comparison
     print "New DiData Inventory Workbook in use:, %s"%(invnew)
     print "DiData Inventory Worksheet in use:, %s"%(wsnew.name)
 
@@ -124,8 +123,6 @@ def main():
                     wsoldlist.append(wsold.cell_value(oldrowi, i))
                 wsolddict[wsold.cell_value(oldrowi,1)]=wsoldlist
 
-    #print wsolddict
-
     #for key,val in wsolddict.items():
         #print key, "==>",val
         #print "\n"
@@ -145,31 +142,7 @@ def main():
                 for i in range(2,5):
                     wsnewlist.append(wsnew.cell_value(newrowi, i))
                 wsnewdict[wsnew.cell_value(newrowi,1)]=wsnewlist
-    #print wsolddict
 
-    #for key,val in wsnewdict.items():
-        #print key, "==>",val
-        #print "\n"
-    #print str(len(wsnewdict))
-    #print str(len(wsolddict))
-    #print len(wsnewdict.keys())
-    #print len(wsolddict.keys())
-    #print wsnewdict.keys() == wsolddict.keys()
-
-    #for oldkey in sorted(wsolddict):
-        #print "%s: %s" %(oldkey, wsolddict[oldkey])
-
-    #for newkey in sorted(wsnewdict):
-        #print "%s: %s" %(newkey, wsnewdict[newkey])
-
-    #mismatch_keys = [key for key in wsolddict if not key in wsnewdict or wsolddict[key] != wsnewdict[key]]
-    #print "Mistmatched Keys"
-    #print mismatch_keys
-    #print "&&&&"
-    #match = not bool(mismatch_keys)
-    #for key in mismatch_keys:
-        #print key
-        #print "%s ==> %s" % (wsolddict[key],wsnewdict[key])
 
     diff=DictDiffer(wsolddict,wsnewdict)
 
@@ -191,7 +164,7 @@ def main():
                 print "New Data for %s:, %s"%(elem,wsnewdict[elem])
             else:
                 print "New Data for %s:, does not exist!"%(elem)
-            #print "\n"
+
     print "+"*80
     print "-"*80
     print "Removed: %s, %d"%(diff_removed,len(diff_removed))
@@ -206,10 +179,11 @@ def main():
                 print "New Data for %s:, %s"%(elem,wsnewdict[elem])
             else:
                 print "New Data for %s:, does not exist!"%(elem)
-            #print "\n"
+
     print "-"*80
     print "~"*80
     print "Changed: %s, %d"%(diff_changed, len(diff_changed))
+    print "Name:,Notes, IP Address, Slot, Model, (muliple sets for a stack)"
     if len(diff_changed) > 0:
         for i in range(len(diff_changed)):
             elem = diff_changed.pop()
@@ -236,7 +210,7 @@ def main():
 # Standard call to the main() function.
 if __name__ == '__main__':
     if len(sys.argv) != 4:
-        print '\nUsage: inv_diff.py.py <siteid> <full path to new inventory file> <full path to old inventory file>\nExample: python inv_nb_check.py "1389" "/Users/Claudia/Box Sync/Network Transformation/Inventory/DiData-inventory-2015-06-15.xlsx" "/Users/Claudia/Box Sync/Network Transformation/Inventory/DiData-inventory-2015-04-20.xlsx"\nNote: Processing can take up to a minute!\n\n'
+        print '\nUsage: inv_diff.py.py <siteid> <full path to NEW inventory file> <full path to OLD inventory file>\nExample: python inv_nb_check.py "1389" "/Users/Claudia/Box Sync/Network Transformation/Inventory/DiData-inventory-2015-06-15.xlsx" "/Users/Claudia/Box Sync/Network Transformation/Inventory/DiData-inventory-2015-04-20.xlsx"\nNote: Processing can take up to a minute!\n\n'
         sys.exit()
     else:
         main()
