@@ -40,13 +40,17 @@ def main():
     not_only="No"
 
     nbfiles=os.listdir(nbdir)
-    nbf=[nbfl.lower() for nbfl in nbfiles]
+    #print nbfiles
+    #nbf=nbfiles.lower()
+    nbf=[x.lower() for x in nbfiles]
     #print nbfiles
     #for file in nbfiles:
         #print file
 
     wb = xlrd.open_workbook(inv)
     ws = wb.sheet_by_name(invsh)
+
+    wrong_names = []
 
     print "DiData Inventory Workbook in use:, %s"%(inv)
     print "DiData Inventory Worksheet in use:, %s"%(ws.name)
@@ -73,8 +77,23 @@ def main():
                 print "**"
             else:
                 print "%s,%s,%s,%s,swfile,NB File NOT Found"%(ws.cell_value(row_index,1),ws.cell_value(row_index,2),ws.cell_value(row_index,3),ws.cell_value(row_index,4))
+            model = ws.cell_value(row_index,4)
+            #print "Model: ", model
+            #print "hostname: ", sw
+
+            if "-ap" in sw and "AIR" not in str(model):
+                #print "bad name"
+                wrong_name_text = sw + "," + str(model) + "," + ws.cell_value(row_index,2)
+                wrong_names.append(wrong_name_text)
+
+
     print ("-")*80
     print str(siterows)
+    print ' ****************** BAD NAMES ******************'
+    #print str(wrong_names)
+
+    for line in wrong_names:
+        print line
 
 
 
