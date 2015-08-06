@@ -52,14 +52,37 @@ def main():
 
     wrong_names = []
 
+    outtxtfilename = siteid + "-inv-nb-check.txt"
+    outtextfile = os.path.join(nbdir,outtxtfilename)
+
+    outtxtfh = open(outtextfile, "w")
+
+    print "*** Output Text File: %s"%outtextfile
+
     print "DiData Inventory Workbook in use:, %s"%(inv)
+    outtxtfh.write("DiData Inventory Workbook in use:, %s"%(inv))
+    outtxtfh.write("\n")
     print "DiData Inventory Worksheet in use:, %s"%(ws.name)
+    outtxtfh.write("DiData Inventory Worksheet in use:, %s"%(ws.name))
+    outtxtfh.write("\n")
     print "Total number of rows in the Inventory Worksheet:, %d"%(ws.nrows)
+    outtxtfh.write("Total number of rows in the Inventory Worksheet:, %d"%(ws.nrows))
+    outtxtfh.write("\n")
     print "Total number of columns in the Inventory Worksheet:, %d"%(ws.ncols)
+    outtxtfh.write("Total number of columns in the Inventory Worksheet:, %d"%(ws.ncols))
+    outtxtfh.write("\n")
     print "Netbrain (NB) Output file directory:, %s"%(nbdir)
+    outtxtfh.write("Netbrain (NB) Output file directory:, %s"%(nbdir))
+    outtxtfh.write("\n")
     print "Site ID to search:, %s"%(siteid)
+    outtxtfh.write("Site ID to search:, %s"%(siteid))
+    outtxtfh.write("\n")
     print ("-")*80
+    outtxtfh.write(("-")*80)
+    outtxtfh.write("\n")
     print "Name, IP Address, Slot, Model, Filename, NB File Found"
+    outtxtfh.write("Name, IP Address, Slot, Model, Filename, NB File Found")
+    outtxtfh.write("\n")
 
     for row_index in range(ws.nrows):
         if ws.cell_value(row_index,6) == int(siteid):
@@ -72,11 +95,14 @@ def main():
             siterows=siterows+1
             #print sw
             #print swfile
-            if swfile in nbf:
+            #if swfile in nbf:
  #               print "%s,%s,%s,%s,swfile,NB File Found"%(ws.cell_value(row_index,1),ws.cell_value(row_index,2),ws.cell_value(row_index,3),ws.cell_value(row_index,4))
-                print "**"
-            else:
+                #print "**"
+            #else:
+            if swfile not in nbf:
                 print "%s,%s,%s,%s,swfile,NB File NOT Found"%(ws.cell_value(row_index,1),ws.cell_value(row_index,2),ws.cell_value(row_index,3),ws.cell_value(row_index,4))
+                outtxtfh.write("%s,%s,%s,%s,swfile,NB File NOT Found"%(ws.cell_value(row_index,1),ws.cell_value(row_index,2),ws.cell_value(row_index,3),ws.cell_value(row_index,4)))
+                outtxtfh.write("\n")
             model = ws.cell_value(row_index,4)
             #print "Model: ", model
             #print "hostname: ", sw
@@ -88,13 +114,28 @@ def main():
 
 
     print ("-")*80
+    outtxtfh.write(("-")*80)
+    outtxtfh.write("\n")
+
     print str(siterows)
-    print ' ****************** BAD NAMES ******************'
-    #print str(wrong_names)
+    outtxtfh.write(str(siterows))
+    outtxtfh.write("\n")
+    outtxtfh.write("\n")
 
-    for line in wrong_names:
-        print line
+    if len(wrong_names) > 0:
+        print ' ****************** BAD AP Models ******************'
+        outtxtfh.write(' ****************** BAD AP Models ******************')
+        outtxtfh.write("\n")
+        print 'hostname, model, IP Address'
+        outtxtfh.write('hostname, model, IP Address')
+        outtxtfh.write("\n")
+        #print str(wrong_names)
+        for line in wrong_names:
+            print line
+            outtxtfh.write(line)
+            outtxtfh.write("\n")
 
+    outtxtfh.close()
 
 
 # Standard call to the main() function.
